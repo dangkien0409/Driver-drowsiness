@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Hệ thống phát hiện tài xế lái xe ngủ gật - Jetson Nano
-Sử dụng camera để theo dõi mắt và phát hiện ngủ gật
+Sử dụng camera để theo dõi mắt, ngáp, và tư thế để phát hiện ngủ gật
 """
 
 import cv2
@@ -11,6 +11,8 @@ import argparse
 from collections import deque
 import config
 from eye_detector import EyeDetector
+from yawn_detector import YawnDetector
+from posture_detector import PostureDetector
 from alert_system import AlertSystem
 
 class DrowsinessDetectionSystem:
@@ -27,12 +29,16 @@ class DrowsinessDetectionSystem:
             consecutive_frames: Số khung hình liên tiếp để phát hiện ngủ
         """
         self.eye_detector = EyeDetector()
+        self.yawn_detector = YawnDetector()
+        self.posture_detector = PostureDetector()
         self.alert_system = AlertSystem(config)
         
         self.ear_threshold = ear_threshold
         self.consecutive_frames = consecutive_frames
         self.frame_count = 0
         self.drowsy_frame_count = 0
+        self.yawn_frame_count = 0
+        self.bad_posture_frame_count = 0
         
         # Lịch sử EAR để tính trung bình
         self.ear_history = deque(maxlen=10)
@@ -112,8 +118,56 @@ class DrowsinessDetectionSystem:
         # Chỉ xác định là ngủ nếu liên tiếp
         confirmed_drowsy = self.drowsy_frame_count >= self.consecutive_frames
         
+        # Phát hiện ngáp
+        yawn_result = {'is_yawning': False, 'mar': 0.0}
+        posture_result = {'is_bad_posture': False, 'roll_angle': 0.0, 'pitch_angle': 0.0, 'forward_score': 0.0, 'posture_type': 'Bình thường'}
+        
+        if detection_result.get('landmarks') is not None:
+            landmarks = detection_result['landmarks']
+            
+            # Phát hiện ngáp
+            yawn_result = self.yawn_detector.detect_yawn(
+                landmarks, 
+                config.MOUTH_AR_THRESHOLD
+            )
+            
+            # Cập nhật ngáp counter
+            if yawn_result['is_yawning']:
+                self.yawn_frame_count += 1
+            else:
+                self.yawn_frame_count = 0
+            
+            # Phát hiện tư thế
+            posture_result = self.posture_detector.detect_posture(
+                landmarks,
+                config.HEAD_ROLL_THRESHOLD,
+                config.HEAD_PITCH_THRESHOLD,
+                config.FORWARD_HEAD_THRESHOLD
+            )
+            
+            # Cập nhật tư thế counter
+            if posture_result['is_bad_posture']:
+                self.bad_posture_frame_count += 1
+            else:
+                self.bad_posture_frame_count = 0
+        
         # Vẽ kết quả
         frame_with_results = self.eye_detector.draw_results(frame, detection_result)
+        
+        # Vẽ ngáp
+        if detection_result.get('landmarks') is not None:
+            frame_with_results = self.yawn_detector.draw_mouth(
+                frame_with_results, 
+                detection_result['landmarks'], 
+                yawn_result['is_yawning']
+            )
+            
+            # Vẽ thông tin tư thế
+            frame_with_results = self.posture_detector.draw_posture_info(
+                frame_with_results,
+                detection_result['landmarks'],
+                posture_result
+            )
         
         # Thêm thông tin thống kê
         status_text = "BINH THUONG" if not confirmed_drowsy else "NGU GAT!"
@@ -123,10 +177,25 @@ class DrowsinessDetectionSystem:
                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
         cv2.putText(frame_with_results, f"Khung ngu: {self.drowsy_frame_count}/{self.consecutive_frames}", (10, 120),
                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 0), 2)
-        cv2.putText(frame_with_results, f"Khung: {self.frame_count}", (10, 150),
+        
+        # Thêm thông tin ngáp
+        yawn_status = "NGAP" if self.yawn_frame_count >= config.YAWN_CONSEC_FRAMES else ""
+        yawn_text = f"Ngap: {yawn_result['mar']:.2f} {'⚠ ' + yawn_status if yawn_status else ''}"
+        cv2.putText(frame_with_results, yawn_text, (10, 150),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 1)
+        
+        # Thêm thông tin tư thế
+        posture_color = (0, 0, 255) if posture_result['is_bad_posture'] else (0, 255, 0)
+        posture_text = f"Tu the: {posture_result['posture_type']}"
+        cv2.putText(frame_with_results, posture_text, (10, 170),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, posture_color, 1)
+        
+        cv2.putText(frame_with_results, f"Khung: {self.frame_count}", (10, 190),
                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (200, 200, 200), 1)
         
         detection_result['confirmed_drowsy'] = confirmed_drowsy
+        detection_result['yawn_result'] = yawn_result
+        detection_result['posture_result'] = posture_result
         
         return frame_with_results, confirmed_drowsy, detection_result
     
@@ -199,6 +268,8 @@ class DrowsinessDetectionSystem:
             
             print(f"Tổng số khung hình xử lý: {self.frame_count}")
             print(f"Tổng lần phát hiện ngủ: {self.drowsy_frame_count}")
+            print(f"Tổng lần phát hiện ngáp: {self.yawn_frame_count}")
+            print(f"Tổng lần phát hiện tư thế xấu: {self.bad_posture_frame_count}")
 
 def main():
     """Hàm chính"""
@@ -216,6 +287,14 @@ def main():
     parser.add_argument(
         "--frames", type=int, default=20,
         help="Số khung hình liên tiếp để xác định ngủ (mặc định: 20)"
+    )
+    parser.add_argument(
+        "--yawn-threshold", type=float, default=0.5,
+        help="Ngưỡng Mouth Aspect Ratio để phát hiện ngáp (mặc định: 0.5)"
+    )
+    parser.add_argument(
+        "--posture-threshold", type=float, default=15,
+        help="Ngưỡng góc đầu để phát hiện tư thế xấu (mặc định: 15)"
     )
     parser.add_argument(
         "--save-video", action="store_true",

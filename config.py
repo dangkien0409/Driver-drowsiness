@@ -15,6 +15,16 @@ CAMERA_DEVICE = 0  # /dev/video0
 EYE_AR_THRESHOLD = 0.2  # Eye Aspect Ratio ngưỡng
 EYE_AR_CONSEC_FRAMES = 20  # Số khung hình liên tiếp để phát hiện ngủ
 
+# Thông số phát hiện ngáp
+MOUTH_AR_THRESHOLD = 0.5  # Mouth Aspect Ratio ngưỡng
+YAWN_CONSEC_FRAMES = 10  # Số khung hình liên tiếp để xác nhận ngáp
+
+# Thông số phát hiện tư thế
+HEAD_ROLL_THRESHOLD = 15  # Ngưỡng góc lệch ngang (độ)
+HEAD_PITCH_THRESHOLD = 20  # Ngưỡng góc tilt dọc (độ)
+FORWARD_HEAD_THRESHOLD = 1.5  # Ngưỡng tư thế cúi đầu
+POSTURE_CONSEC_FRAMES = 15  # Số khung hình để xác nhận tư thế xấu
+
 # Cảnh báo
 ALARM_ENABLED = True
 ALARM_SOUND_PATH = "sounds/alarm.wav"
