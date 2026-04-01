@@ -150,7 +150,7 @@ class PostureDetector:
             'roll_angle': 0.0,
             'pitch_angle': 0.0,
             'forward_score': 0.0,
-            'posture_type': 'Bình thường'
+            'posture_type': 'Binh thuong'
         }
         
         if landmarks is None:
@@ -168,13 +168,13 @@ class PostureDetector:
         # Phân loại tư thế
         if abs(roll_angle) > roll_threshold:
             result['is_bad_posture'] = True
-            result['posture_type'] = 'Nghiêng đầu' if roll_angle > 0 else 'Nghiêng sang trái'
+            result['posture_type'] = 'Nghieng dau' if roll_angle > 0 else 'Nghieng sang trai'
         elif abs(pitch_angle) > pitch_threshold:
             result['is_bad_posture'] = True
-            result['posture_type'] = 'Cúi đầu' if pitch_angle > 0 else 'Hương lên'
+            result['posture_type'] = 'Cui dau' if pitch_angle > 0 else 'Huong len'
         elif forward_score > forward_threshold:
             result['is_bad_posture'] = True
-            result['posture_type'] = 'Cúi đầu phía trước'
+            result['posture_type'] = 'Cui dau phia truoc'
         
         return result
     

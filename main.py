@@ -120,7 +120,7 @@ class DrowsinessDetectionSystem:
         
         # Phát hiện ngáp
         yawn_result = {'is_yawning': False, 'mar': 0.0}
-        posture_result = {'is_bad_posture': False, 'roll_angle': 0.0, 'pitch_angle': 0.0, 'forward_score': 0.0, 'posture_type': 'Bình thường'}
+        posture_result = {'is_bad_posture': False, 'roll_angle': 0.0, 'pitch_angle': 0.0, 'forward_score': 0.0, 'posture_type': 'Binh thuong'}
         
         if detection_result.get('landmarks') is not None:
             landmarks = detection_result['landmarks']
