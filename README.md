@@ -245,5 +245,5 @@ Hoan nghênh các pull request và issue reports!
 
 ---
 
-**Phiên bản**: 1.0  
-**Cập nhật lần cuối**: 2024
+**Phiên bản**: 1.0 
+**Cập nhật lần cuối**: 2026
