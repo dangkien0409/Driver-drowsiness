@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import cv2
 import numpy as np
 from scipy.spatial import distance as dist
@@ -28,10 +29,13 @@ class PostureDetector:
                 self.predictor = None
         
         # Điểm mốc quan trọng cho phát hiện tư thế
+        # Ghi chú: Dlib 68-point landmarks
+        # - Mắt phải (viewer's right): điểm 36-41, tâm ≈ 39
+        # - Mắt trái (viewer's left): điểm 42-47, tâm ≈ 45
         self.NOSE_TIP = 30           # Đầu mũi
         self.CHIN = 8                # Cằm
-        self.LEFT_EYE = 36           # Mắt trái
-        self.RIGHT_EYE = 45          # Mắt phải
+        self.RIGHT_EYE = 39          # Mắt phải (viewer's right) - tâm mắt
+        self.LEFT_EYE = 45           # Mắt trái (viewer's left) - tâm mắt
         self.LEFT_MOUTH = 48         # Góc miệng trái
         self.RIGHT_MOUTH = 54        # Góc miệng phải
     
@@ -50,10 +54,10 @@ class PostureDetector:
             return 0.0
         
         # Lấy tọa độ hai mắt
-        left_eye = landmarks[self.LEFT_EYE]
-        right_eye = landmarks[self.RIGHT_EYE]
+        right_eye = landmarks[self.RIGHT_EYE]  # viewer's right
+        left_eye = landmarks[self.LEFT_EYE]    # viewer's left
         
-        # Tính góc từ hai mắt
+        # Tính góc từ hai mắt (từ mắt trái sang mắt phải)
         dy = right_eye[1] - left_eye[1]
         dx = right_eye[0] - left_eye[0]
         
@@ -234,8 +238,8 @@ class PostureDetector:
         key_points = {
             'Mũi': landmarks[self.NOSE_TIP],
             'Cằm': landmarks[self.CHIN],
-            'Mắt T': landmarks[self.LEFT_EYE],
-            'Mắt P': landmarks[self.RIGHT_EYE]
+            'Mắt Trái': landmarks[self.LEFT_EYE],
+            'Mắt Phải': landmarks[self.RIGHT_EYE]
         }
         
         for name, (x, y) in key_points.items():

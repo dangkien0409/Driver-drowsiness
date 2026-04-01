@@ -151,7 +151,31 @@ Trong đó p1-p6 là tọa độ các điểm mốc của mắt được phát h
 4. **Tính EAR** cho cả hai mắt
 5. **Kiểm tra ngủ**: Nếu EAR < ngưỡng cho N khung hình liên tiếp → Phát hiện ngủ
 6. **Kích hoạt cảnh báo**
+### Các Điểm Mốc Khuôn Mặt (68 dlib Landmarks)
 
+Hệ thống phát hiện các tính năng khuôn mặt chính:
+
+```
+Mũi (Nose):        Điểm 30 (Đầu mũi)
+Cằm (Chin):        Điểm 8
+Mắt Phải (Right):  Điểm 36-41 (Tâm = 39)  [Viewer's right]
+Mắt Trái (Left):   Điểm 42-47 (Tâm = 45)  [Viewer's left]
+Miệng (Mouth):     Điểm 48-67
+```
+
+**Lưu ý**: "Phải" và "Trái" được xác định từ góc nhìn của người xem (camera), không phải từ góc nhìn của tài xế.
+
+### Bug Fix v1.1 - Sửa Chỉ Number Landmarks
+
+**Vấn đề**: Phiên bản trước đã sử dụng sai chỉ số để xác định các điểm mắt:
+- `LEFT_EYE = 36` ❌ (điểm này thực chất là mắt PHẢI)
+- `RIGHT_EYE = 45` ❌ (điểm này không phải một điểm mốc mắt chuẩn)
+
+**Giải pháp** (v1.1+):
+- `RIGHT_EYE = 39` ✅ (tâm mắt phải - viewer's right)
+- `LEFT_EYE = 45` ✅ (tâm mắt trái - viewer's left)
+
+**Tác động**: Cải thiện độ chính xác của phát hiện tư thế đầu (head roll angle).
 ## 📈 Tối ưu hóa cho Jetson Nano
 
 - **Độ phân giải giảm**: 320x240 (thay vì 1080p)
@@ -185,6 +209,28 @@ python3 install_dlib_model.py
 - Giảm độ phân giải (Sửa `CAMERA_WIDTH`, `CAMERA_HEIGHT`)
 - Tắt hiển thị video (`--no-display`)
 - Tắt lưu video
+
+### Lỗi Ký Tự Tiếng Việt (Encoding Issues)
+
+Nếu thấy ký tự lỗi hoặc "mắt T" / "mắt P" thay vì "Mắt Trái" / "Mắt Phải":
+
+**Nguyên nhân**: Các file Python cần khai báo mã hóa UTF-8
+
+**Giải pháp** (từ v1.1+):
+- Tất cả file `.py` đã được cập nhật với `# -*- coding: utf-8 -*-`
+- Nếu vẫn gặp lỗi, kiểm tra:
+
+```bash
+# Kiểm tra mã hóa file (Linux/Mac)
+file -i posture_detector.py
+# Kết quả mong muốn: charset=utf-8
+
+# Nếu cần chuyển mã hóa (Linux/Mac)
+iconv -f ISO-8859-1 -t UTF-8 posture_detector.py -o posture_detector_fixed.py
+mv posture_detector_fixed.py posture_detector.py
+```
+
+**Lưu ý Windows**: Mở VS Code, bấm Ctrl+Shift+P, gõ "Reopen with Encoding", chọn UTF-8
 
 ## 📝 Log và Dữ liệu
 
@@ -245,5 +291,17 @@ Hoan nghênh các pull request và issue reports!
 
 ---
 
-**Phiên bản**: 1.0 
-**Cập nhật lần cuối**: 2026
+**Phiên bản**: 1.1
+**Cập nhật lần cuối**: Tháng 4, 2026
+
+### Lịch sử thay đổi
+
+**v1.1** (Tháng 4, 2026):
+- ✅ Sửa chỉ số landmark mắt (LEFT_EYE/RIGHT_EYE indices)
+- ✅ Thêm khai báo UTF-8 encoding cho tất cả file Python
+- ✅ Cập nhật ghi chú về facial landmarks (68-point dlib model)
+- ✅ Thêm troubleshooting cho lỗi ký tự tiếng Việt
+- ✅ Cải thiện ghi chú comment trong code
+
+**v1.0**:
+- Phiên bản ban đầu
