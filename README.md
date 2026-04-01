@@ -37,7 +37,7 @@ https://developer.nvidia.com/jetson-nano-developer-kit
 ### 2. Clone dự án
 
 ```bash
-git clone https://github.com/yourusername/Driver-drowsiness.git
+git clone https://github.com/dangkien0409/Driver-drowsiness.git
 cd Driver-drowsiness
 ```
 
