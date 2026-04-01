@@ -1,0 +1,14 @@
+[Unit]
+Description=Driver Drowsiness Detection System
+After=network.target
+
+[Service]
+Type=simple
+User=nvidia
+WorkingDirectory=/home/nvidia/Driver-drowsiness
+ExecStart=/usr/bin/python3 /home/nvidia/Driver-drowsiness/main.py --no-display
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

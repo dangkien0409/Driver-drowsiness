@@ -1,0 +1,29 @@
+# Giấy phép MIT
+
+Copyright (c) 2024 Driver Drowsiness Detection Project
+
+Được cấp phép theo Giấy phép MIT (MIT License). Bạn có toàn quyền sử dụng, sửa đổi, 
+phân phối phần mềm này, miễn là tuân thủ các điều khoản sau:
+
+## Điều khoản chính
+
+1. **Sử dụng tự do**: Bạn có thể sử dụng phần mềm cho bất kỳ mục đích nào, 
+   bao gồm cả mục đích thương mại.
+
+2. **Sửa đổi**: Bạn có thể sửa đổi mã nguồn tùy theo nhu cầu.
+
+3. **Phân phối**: Bạn có thể phân phối lại phần mềm, 
+   miễn là kèm theo thông báo bản quyền này.
+
+4. **Không có trách nhiệm pháp lý**: Phần mềm được cung cấp "AS IS" (nguyên trạng), 
+   không có bất kỳ bảo hành nào.
+
+## Lưu ý quan trọng về An toàn
+
+**CẢNH BÁO**: Hệ thống này chỉ là công cụ hỗ trợ. Nó KHÔNG thay thế sự tỉnh táo 
+của tài xế. Người sử dụng chăng chịu toàn bộ trách nhiệm pháp lý khi sử dụng 
+phần mềm này để phát hiện ngủ gật.
+
+---
+
+Để biết thêm chi tiết, xem: https://opensource.org/licenses/MIT
