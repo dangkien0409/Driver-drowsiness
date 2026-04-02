@@ -11,8 +11,8 @@ def print_menu():
     """In menu"""
     print("\n")
     print("╔════════════════════════════════════════════════╗")
-    print("║   DRIVER DROWSINESS DETECTION                 ║")
-    print("║   Jetson Nano 4GB                             ║")
+    print("║   DRIVER DROWSINESS DETECTION                  ║")
+    print("║   Jetson Nano 4GB                              ║")
     print("╚════════════════════════════════════════════════╝")
     print("\n📋 Các tùy chọn:")
     print("  1. Chạy bình thường (hiển thị video)")

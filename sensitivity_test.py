@@ -81,8 +81,8 @@ def main():
     
     print("\n")
     print("╔════════════════════════════════════════════════╗")
-    print("║   KIỂM TRA ĐỘ NHẠY PHÁT HIỆN                  ║")
-    print("║   Jetson Nano - Driver Drowsiness Detection   ║")
+    print("║   KIỂM TRA ĐỘ NHẠY PHÁT HIỆN                   ║")
+    print("║   Jetson Nano - Driver Drowsiness Detection    ║")
     print("╚════════════════════════════════════════════════╝")
     
     test_sensitivity(

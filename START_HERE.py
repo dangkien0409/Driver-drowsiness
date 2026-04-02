@@ -12,13 +12,13 @@ def print_welcome():
     print("""
 ╔══════════════════════════════════════════════════════════════╗
 ║                                                              ║
-║   🚗 DRIVER DROWSINESS DETECTION - JETSON NANO 4GB 🚗        ║
+║   🚗 DRIVER DROWSINESS DETECTION - JETSON NANO 4GB 🚗       ║
 ║                                                              ║
-║   Hệ thống phát hiện tài xế lái xe ngủ gật sử dụng:         ║
+║   Hệ thống phát hiện tài xế lái xe ngủ gật sử dụng:          ║
 ║   • Jetson Nano 4GB                                          ║
 ║   • Camera USB hoặc CSI                                      ║
-║   • Nhận diện khuôn mặt và mắt                              ║
-║   • Cảnh báo âm thanh khi phát hiện ngủ                     ║
+║   • Nhận diện khuôn mặt và mắt                               ║
+║   • Cảnh báo âm thanh khi phát hiện ngủ                      ║
 ║                                                              ║
 ╚══════════════════════════════════════════════════════════════╝
     """)
@@ -318,13 +318,13 @@ def main():
 │          CHỌN MỤC TÌM HIỂU THÊM (hoặc nhấn Q thoát)      │
 ├──────────────────────────────────────────────────────────┤
 │  1. Quick Start (3 bước cơ bản)                          │
-│  2. Hướng dẫn Chi Tiết (từng bước dễ hiểu)              │
-│  3. Các Tính Năng                                       │
-│  4. Lệnh Thường Dùng                                    │
-│  5. Khắc Phục Sự Cố                                     │
-│  6. Mẹo & Thủ Thuật                                     │
-│  7. Hướng Dẫn File                                      │
-│  Q. Thoát                                               │
+│  2. Hướng dẫn Chi Tiết (từng bước dễ hiểu)               │
+│  3. Các Tính Năng                                        │
+│  4. Lệnh Thường Dùng                                     │
+│  5. Khắc Phục Sự Cố                                      │
+│  6. Mẹo & Thủ Thuật                                      │
+│  7. Hướng Dẫn File                                       │
+│  Q. Thoát                                                │
 └──────────────────────────────────────────────────────────┘
 
 Chọn (1-7 hoặc Q): """)

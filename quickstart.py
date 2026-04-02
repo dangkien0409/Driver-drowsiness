@@ -29,8 +29,8 @@ def main():
     """Hàm chính"""
     print("\n")
     print("╔════════════════════════════════════════════════╗")
-    print("║   QUICK START - BẮT ĐẦU NHANH                 ║")
-    print("║   Phát hiện Ngủ gật - Jetson Nano             ║")
+    print("║   QUICK START - BẮT ĐẦU NHANH                  ║")
+    print("║   Phát hiện Ngủ gật - Jetson Nano              ║")
     print("╚════════════════════════════════════════════════╝")
     
     steps = [
