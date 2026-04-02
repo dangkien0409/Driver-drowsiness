@@ -101,8 +101,8 @@ def main():
     """Hàm chính"""
     print("\n")
     print("╔════════════════════════════════════════════════╗")
-    print("║   KIỂM TRA HỆ THỐNG PHÁT HIỆN NGỦ GẬT        ║")
-    print("║        Jetson Nano 4GB                        ║")
+    print("║   KIỂM TRA HỆ THỐNG PHÁT HIỆN NGỦ GẬT          ║")
+    print("║        Jetson Nano 4GB                         ║")
     print("╚════════════════════════════════════════════════╝")
     
     # Thực hiện các kiểm tra

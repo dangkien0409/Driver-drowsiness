@@ -185,7 +185,7 @@ def main():
     
     print("\n")
     print("╔════════════════════════════════════════════════╗")
-    print("║   KIỂM TRA HIỆU SUẤT JETSON NANO              ║")
+    print("║   KIỂM TRA HIỆU SUẤT JETSON NANO               ║")
     print("╚════════════════════════════════════════════════╝")
     
     tester = PerformanceTest()

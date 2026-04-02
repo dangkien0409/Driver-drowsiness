@@ -48,7 +48,7 @@ def print_report(data):
     
     print("\n")
     print("╔════════════════════════════════════════════════╗")
-    print("║   PHÂN TÍCH LOG - DRIVER DROWSINESS           ║")
+    print("║   PHÂN TÍCH LOG - DRIVER DROWSINESS            ║")
     print("╚════════════════════════════════════════════════╝")
     
     print(f"\n📊 Thống kê Tổng Quát:")
