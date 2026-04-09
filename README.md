@@ -5,9 +5,14 @@ Hệ thống phát hiện tài xế lái xe ngủ gật sử dụng **Jetson Nan
 ## 📋 Tính năng chính
 
 - ✅ **Phát hiện mắt đóng/mở** sử dụng Eye Aspect Ratio (EAR)
-- ✅ **Cảnh báo âm thanh** khi phát hiện ngủ gật
+- ✅ **Phát hiện ngáp** sử dụng Mouth Aspect Ratio (MAR)
+- ✅ **Phát hiện tư thế xấu** 
+  - Lệch đầu (Head Roll)
+  - Cúi/nâng đầu (Head Pitch)  
+  - Cúi phía trước (Forward Head Posture)
+- ✅ **Cảnh báo đa lớp** (ngủ/ngáp/tư thế xấu)
 - ✅ **Ghi log** tất cả các sự kiện phát hiện
-- ✅ **Lưu khung hình** ngủ để phân tích sau
+- ✅ **Lưu khung hình** khi phát hiện sự kiện
 - ✅ **Tối ưu cho Jetson Nano** (độ phân giải thấp, hiệu suất cao)
 - ✅ **Hỗ trợ email/SMS** (tuỳ chọn)
 
@@ -70,8 +75,14 @@ python3 main.py
 # Chỉ định camera
 python3 main.py --camera 0
 
-# Thay đổi ngưỡng phát hiện (mặc định 0.2)
+# Thay đổi ngưỡng phát hiện mắt (EAR, mặc định 0.2)
 python3 main.py --threshold 0.15
+
+# Thay đổi ngưỡng phát hiện ngáp (MAR, mặc định 0.5)
+python3 main.py --yawn-threshold 0.4
+
+# Thay đổi ngưỡng phát hiện tư thế (độ, mặc định 15)
+python3 main.py --posture-threshold 20
 
 # Thay đổi số khung hình để xác định ngủ (mặc định 20)
 python3 main.py --frames 25
@@ -83,7 +94,7 @@ python3 main.py --save-video
 python3 main.py --no-display
 
 # Kết hợp nhiều tùy chọn
-python3 main.py --camera 0 --threshold 0.18 --save-video --no-display
+python3 main.py --camera 0 --threshold 0.18 --yawn-threshold 0.45 --posture-threshold 18 --save-video
 ```
 
 ### Các phím tắt
@@ -96,16 +107,20 @@ python3 main.py --camera 0 --threshold 0.18 --save-video --no-display
 ```
 Driver-drowsiness/
 ├── README.md                    # File này
+├── ARCHITECTURE.md              # Sơ đồ kiến trúc chi tiết
+├── YAWN_POSTURE_GUIDE.md        # Hướng dẫn ngáp & tư thế
 ├── config.py                    # Cấu hình hệ thống
-├── main.py                      # File chính
-├── eye_detector.py              # Lớp phát hiện mắt
+├── main.py                      # File chính (tích hợp tất cả detectors)
+├── eye_detector.py              # Phát hiện mắt (EAR)
+├── yawn_detector.py             # Phát hiện ngáp (MAR)
+├── posture_detector.py          # Phát hiện tư thế đầu
 ├── alert_system.py              # Hệ thống cảnh báo
 ├── requirements.txt             # Các gói Python cần thiết
 ├── setup_jetson.sh              # Script cài đặt
 ├── install_dlib_model.py        # Script tải mô hình
 ├── models/                      # Thư mục lưu mô hình
 ├── logs/                        # Lưu trữ log
-├── captured_frames/             # Lưu trữ ảnh ngủ
+├── captured_frames/             # Lưu trữ ảnh sự kiện
 └── sounds/                      # Âm thanh cảnh báo
 ```
 
@@ -114,18 +129,27 @@ Driver-drowsiness/
 Chỉnh sửa file `config.py` để tuỳ chỉnh:
 
 ```python
-# Độ phân giải camera
+# ===== CAMERA =====
 CAMERA_WIDTH = 320
 CAMERA_HEIGHT = 240
+CAMERA_FPS = 20
 
-# Ngưỡng Eye Aspect Ratio
-EYE_AR_THRESHOLD = 0.2
+# ===== PHÁT HIỆN MẮT =====
+EYE_AR_THRESHOLD = 0.2           # Ngưỡng EAR (Eye Aspect Ratio)
+EYE_AR_CONSEC_FRAMES = 20        # Khung liên tiếp để xác nhận ngủ
 
-# Số khung hình liên tiếp để phát hiện ngủ
-EYE_AR_CONSEC_FRAMES = 20
+# ===== PHÁT HIỆN NGÁP =====
+MOUTH_AR_THRESHOLD = 0.5         # Ngưỡng MAR (Mouth Aspect Ratio)  
+YAWN_CONSEC_FRAMES = 10          # Khung liên tiếp để xác nhận ngáp
 
-# Loại cảnh báo
-ALERT_TYPE = "sound"  # "sound", "email", "sms", "all"
+# ===== PHÁT HIỆN TƯ THẾ =====
+HEAD_ROLL_THRESHOLD = 15         # Góc lệch ngang tối đa (độ)
+HEAD_PITCH_THRESHOLD = 20        # Góc cúi/nâng tối đa (độ)
+FORWARD_HEAD_THRESHOLD = 1.5     # Ngưỡng cúi phía trước (tỷ lệ)
+POSTURE_CONSEC_FRAMES = 15       # Khung để xác nhận tư thế xấu
+
+# ===== CẢNH BÁO =====
+ALERT_TYPE = "sound"             # "sound", "email", "sms", "all"
 ```
 
 ## 🎯 Chi tiết thuật toán

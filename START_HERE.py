@@ -100,6 +100,14 @@ def print_detailed_steps():
   Chế độ 3: Lưu video
   $ python3 main.py --save-video
   
+  Chế độ 4: Tuỳ chỉnh ngưỡng
+  $ python3 main.py --threshold 0.18 --yawn-threshold 0.45 --posture-threshold 18
+  $ python3 main.py --save-video
+  
+  Chế độ 4: Tuỳ chỉnh ngưỡng
+  $ python3 main.py --threshold 0.18 --yawn-threshold 0.45 --posture-threshold 18
+  $ python3 main.py --save-video
+  
   Chế độ 4: Tuỳ chỉnh tham số
   $ python3 main.py --threshold 0.15 --frames 25
   

@@ -4,7 +4,7 @@
 
 Đây là một hệ thống **phát hiện tài xế lái xe ngủ gật** hoàn chỉnh sử dụng **Jetson Nano 4GB** và camera. 
 
-Hệ thống sử dụng **Eye Aspect Ratio (EAR)** - một kỹ thuật phát hiện mắt dựa trên điểm mốc khuôn mặt để xác định khi nào tài xế đang ngủ gật.
+Hệ thống sử dụng **Eye Aspect Ratio (EAR)**, **Mouth Aspect Ratio (MAR)** và **Head Posture Analysis** - những kỹ thuật dựa trên điểm mốc khuôn mặt để xác định khi nào tài xế đang ngủ gật, ngáp, hoặc có tư thế xấu.
 
 ---
 
@@ -41,6 +41,8 @@ python3 run.py
 Driver-drowsiness/
 ├── 📄 main.py                 # Chương trình chính
 ├── 📄 eye_detector.py         # Phát hiện mắt & EAR
+├── 📄 yawn_detector.py        # Phát hiện ngáp & MAR
+├── 📄 posture_detector.py     # Phát hiện tư thế đầu
 ├── 📄 alert_system.py         # Hệ thống cảnh báo
 ├── 📄 config.py               # Cấu hình
 ├── 📄 run.py                  # Menu tương tác
@@ -57,10 +59,12 @@ Driver-drowsiness/
 ├── 📖 README.md               # Tài liệu chính
 ├── 📖 DEVELOPMENT.md          # Hướng dẫn nâng cấp
 ├── 📖 CONTRIBUTING.md         # Hướng dẫn đóng góp
+├── 📖 ARCHITECTURE.md         # Sơ đồ kiến trúc
+├── 📖 YAWN_POSTURE_GUIDE.md   # Hướng dẫn ngáp & tư thế
 ├── 📚 QUICK_SUMMARY.md        # File này
 ├── 🌳 models/                 # Mô hình phát hiện
 ├── 📋 logs/                   # Log file
-├── 🎥 captured_frames/        # Ảnh khi ngủ
+├── 🎥 captured_frames/        # Ảnh khi cảnh báo
 └── 🔊 sounds/                 # Âm thanh cảnh báo
 ```
 
@@ -71,9 +75,11 @@ Driver-drowsiness/
 | Tính năng | Mô tả |
 |-----------|-------|
 | 👁️ **Phát hiện mắt** | Sử dụng EAR từ dlib landmark |
-| ⚠️ **Cảnh báo** | Âm thanh, Email, SMS |
+| 😴 **Phát hiện ngáp** | Sử dụng MAR (Mouth Aspect Ratio) |
+| 🧍 **Phát hiện tư thế** | Lệch đầu, cúi, tư thế cúi |
+| ⚠️ **Cảnh báo đa lớp** | Âm thanh, Email, SMS |
 | 📊 **Logging** | Ghi lại tất cả sự kiện |
-| 🎥 **Lưu ảnh** | Chụp khung hình khi ngủ |
+| 🎥 **Lưu ảnh** | Chụp khung hình khi cảnh báo |
 | 📈 **Tối ưu** | Được thiết kế cho Jetson Nano |
 | ⚙️ **Tuỳ chỉnh** | Ngưỡng, camera, cảnh báo |
 

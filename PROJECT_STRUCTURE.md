@@ -6,6 +6,8 @@ Driver-drowsiness/
 ├── 🔷 CORE MODULES (Lõi chương trình)
 │   ├── main.py                       # Chương trình chính - điểm bắt đầu
 │   ├── eye_detector.py               # Phát hiện mắt & tính EAR
+│   ├── yawn_detector.py              # Phát hiện ngáp & tính MAR
+│   ├── posture_detector.py           # Phát hiện tư thế đầu
 │   ├── alert_system.py               # Hệ thống cảnh báo
 │   └── config.py                     # Cấu hình hệ thống
 │
@@ -58,8 +60,10 @@ Driver-drowsiness/
 ## 📋 Chi Tiết Từng Thành Phần
 
 ### Core Modules
-- **main.py**: Vòng lặp chính, xử lý camera, điều phối các module
+- **main.py**: Vòng lặp chính, xử lý camera, điệu phối các module (mắt, ngáp, tư thế)
 - **eye_detector.py**: Phát hiện mắt dùng dlib, tính toán EAR
+- **yawn_detector.py**: Phát hiện ngáp dùng MAR (Mouth Aspect Ratio)
+- **posture_detector.py**: Phát hiện tư thế đầu (lech, cúi, tư thế cúi)
 - **alert_system.py**: Cảnh báo, logging, lưu ảnh
 - **config.py**: Các hằng số cấu hình toàn bộ hệ thống
 
