@@ -13,11 +13,10 @@ Sơ đồ Kiến trúc:
         ↓
     ┌──────────────────┬──────────────────┬──────────────────┐
     ↓                  ↓                  ↓                  ↓
-[eye_detector.py] [yawn_detector.py] [posture_detector.py] [landmarks]
-├─ Tính EAR      ├─ Tính MAR      ├─ Head Roll       
-├─ Mắt đóng/mở   ├─ Ngáp?         ├─ Head Pitch      
-└─ Status        └─ is_yawning    ├─ Forward Head    
-                                   └─ is_bad_posture
+[eye_detector.py] [yawn_detector.py] [landmarks]
+├─ Tính EAR      ├─ Tính MAR
+├─ Mắt đóng/mở   ├─ Ngáp?
+└─ Status        └─ is_yawning
         ↓                  ↓                  ↓
     ┌─────────────────────────────────────────────────┐
     │ [DrowsinessDetectionSystem]                     │
@@ -80,11 +79,7 @@ Sơ đồ Kiến trúc:
       - Kiểm tra: consecutive_yawn_frames >= 10
       - Nếu đúng → Ghi log ngáp (cảnh báo nhẹ)
    
-   c) PHÁT HIỆN TƯ THẾ XẤU:
-      - Kiểm tra: consecutive_bad_posture_frames >= 15
-      - Nếu đúng → Kích hoạt cảnh báo tư thế
-   
-   d) KÍCH HOẠT ALERT:
+   c) KÍCH HOẠT ALERT:
       - Phát âm thanh cảnh báo 🔊
       - Ghi log chi tiết sự kiện
       - Lưu ảnh hiện tại 📸

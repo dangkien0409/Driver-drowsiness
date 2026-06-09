@@ -4,7 +4,7 @@
 
 Đây là một hệ thống **phát hiện tài xế lái xe ngủ gật** hoàn chỉnh sử dụng **Jetson Nano 4GB** và camera. 
 
-Hệ thống sử dụng **Eye Aspect Ratio (EAR)**, **Mouth Aspect Ratio (MAR)** và **Head Posture Analysis** - những kỹ thuật dựa trên điểm mốc khuôn mặt để xác định khi nào tài xế đang ngủ gật, ngáp, hoặc có tư thế xấu.
+Hệ thống sử dụng **Eye Aspect Ratio (EAR)** và **Mouth Aspect Ratio (MAR)** - những kỹ thuật dựa trên điểm mốc khuôn mặt để xác định khi nào tài xế đang ngủ gật hoặc ngáp.
 
 ---
 
@@ -42,7 +42,7 @@ Driver-drowsiness/
 ├── 📄 main.py                 # Chương trình chính
 ├── 📄 eye_detector.py         # Phát hiện mắt & EAR
 ├── 📄 yawn_detector.py        # Phát hiện ngáp & MAR
-├── 📄 posture_detector.py     # Phát hiện tư thế đầu
+
 ├── 📄 alert_system.py         # Hệ thống cảnh báo
 ├── 📄 config.py               # Cấu hình
 ├── 📄 run.py                  # Menu tương tác
@@ -60,7 +60,7 @@ Driver-drowsiness/
 ├── 📖 DEVELOPMENT.md          # Hướng dẫn nâng cấp
 ├── 📖 CONTRIBUTING.md         # Hướng dẫn đóng góp
 ├── 📖 ARCHITECTURE.md         # Sơ đồ kiến trúc
-├── 📖 YAWN_POSTURE_GUIDE.md   # Hướng dẫn ngáp & tư thế
+├── 📄 YAWN_POSTURE_GUIDE.md   # Hướng dẫn phát hiện ngáp
 ├── 📚 QUICK_SUMMARY.md        # File này
 ├── 🌳 models/                 # Mô hình phát hiện
 ├── 📋 logs/                   # Log file
@@ -76,7 +76,7 @@ Driver-drowsiness/
 |-----------|-------|
 | 👁️ **Phát hiện mắt** | Sử dụng EAR từ dlib landmark |
 | 😴 **Phát hiện ngáp** | Sử dụng MAR (Mouth Aspect Ratio) |
-| 🧍 **Phát hiện tư thế** | Lệch đầu, cúi, tư thế cúi |
+
 | ⚠️ **Cảnh báo đa lớp** | Âm thanh, Email, SMS |
 | 📊 **Logging** | Ghi lại tất cả sự kiện |
 | 🎥 **Lưu ảnh** | Chụp khung hình khi cảnh báo |

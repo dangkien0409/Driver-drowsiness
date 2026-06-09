@@ -6,11 +6,7 @@ Hệ thống phát hiện tài xế lái xe ngủ gật sử dụng **Jetson Nan
 
 - ✅ **Phát hiện mắt đóng/mở** sử dụng Eye Aspect Ratio (EAR)
 - ✅ **Phát hiện ngáp** sử dụng Mouth Aspect Ratio (MAR)
-- ✅ **Phát hiện tư thế xấu** 
-  - Lệch đầu (Head Roll)
-  - Cúi/nâng đầu (Head Pitch)  
-  - Cúi phía trước (Forward Head Posture)
-- ✅ **Cảnh báo đa lớp** (ngủ/ngáp/tư thế xấu)
+- ✅ **Cảnh báo đa lớp** (ngủ/ngáp)
 - ✅ **Ghi log** tất cả các sự kiện phát hiện
 - ✅ **Lưu khung hình** khi phát hiện sự kiện
 - ✅ **Tối ưu cho Jetson Nano** (độ phân giải thấp, hiệu suất cao)
@@ -81,9 +77,6 @@ python3 main.py --threshold 0.15
 # Thay đổi ngưỡng phát hiện ngáp (MAR, mặc định 0.5)
 python3 main.py --yawn-threshold 0.4
 
-# Thay đổi ngưỡng phát hiện tư thế (độ, mặc định 15)
-python3 main.py --posture-threshold 20
-
 # Thay đổi số khung hình để xác định ngủ (mặc định 20)
 python3 main.py --frames 25
 
@@ -94,7 +87,7 @@ python3 main.py --save-video
 python3 main.py --no-display
 
 # Kết hợp nhiều tùy chọn
-python3 main.py --camera 0 --threshold 0.18 --yawn-threshold 0.45 --posture-threshold 18 --save-video
+python3 main.py --camera 0 --threshold 0.18 --yawn-threshold 0.45 --save-video
 ```
 
 ### Các phím tắt
@@ -108,12 +101,11 @@ python3 main.py --camera 0 --threshold 0.18 --yawn-threshold 0.45 --posture-thre
 Driver-drowsiness/
 ├── README.md                    # File này
 ├── ARCHITECTURE.md              # Sơ đồ kiến trúc chi tiết
-├── YAWN_POSTURE_GUIDE.md        # Hướng dẫn ngáp & tư thế
+├── YAWN_POSTURE_GUIDE.md        # Hướng dẫn phát hiện ngáp
 ├── config.py                    # Cấu hình hệ thống
 ├── main.py                      # File chính (tích hợp tất cả detectors)
 ├── eye_detector.py              # Phát hiện mắt (EAR)
 ├── yawn_detector.py             # Phát hiện ngáp (MAR)
-├── posture_detector.py          # Phát hiện tư thế đầu
 ├── alert_system.py              # Hệ thống cảnh báo
 ├── requirements.txt             # Các gói Python cần thiết
 ├── setup_jetson.sh              # Script cài đặt
@@ -141,12 +133,6 @@ EYE_AR_CONSEC_FRAMES = 20        # Khung liên tiếp để xác nhận ngủ
 # ===== PHÁT HIỆN NGÁP =====
 MOUTH_AR_THRESHOLD = 0.5         # Ngưỡng MAR (Mouth Aspect Ratio)  
 YAWN_CONSEC_FRAMES = 10          # Khung liên tiếp để xác nhận ngáp
-
-# ===== PHÁT HIỆN TƯ THẾ =====
-HEAD_ROLL_THRESHOLD = 15         # Góc lệch ngang tối đa (độ)
-HEAD_PITCH_THRESHOLD = 20        # Góc cúi/nâng tối đa (độ)
-FORWARD_HEAD_THRESHOLD = 1.5     # Ngưỡng cúi phía trước (tỷ lệ)
-POSTURE_CONSEC_FRAMES = 15       # Khung để xác nhận tư thế xấu
 
 # ===== CẢNH BÁO =====
 ALERT_TYPE = "sound"             # "sound", "email", "sms", "all"
@@ -199,7 +185,6 @@ Miệng (Mouth):     Điểm 48-67
 - `RIGHT_EYE = 39` ✅ (tâm mắt phải - viewer's right)
 - `LEFT_EYE = 45` ✅ (tâm mắt trái - viewer's left)
 
-**Tác động**: Cải thiện độ chính xác của phát hiện tư thế đầu (head roll angle).
 ## 📈 Tối ưu hóa cho Jetson Nano
 
 - **Độ phân giải giảm**: 320x240 (thay vì 1080p)

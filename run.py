@@ -13,7 +13,7 @@ def print_menu():
     print("╔════════════════════════════════════════════════╗")
     print("║   DRIVER DROWSINESS DETECTION                  ║")
     print("║   Jetson Nano 4GB                              ║")
-    print("║   (Mắt + Ngáp + Tư thế)                        ║")
+    print("║   (Mắt + Ngáp)                                 ║")
     print("╚════════════════════════════════════════════════╝")
     print("\n📋 Các tùy chọn:")
     print("  1. Chạy bình thường (hiển thị video)")
@@ -45,11 +45,7 @@ def get_thresholds():
     mar_threshold = input().strip()
     mar_threshold = float(mar_threshold) if mar_threshold else "0.5"
     
-    print("  Ngưỡng tư thế (mặc định: 15): ", end="")
-    posture_threshold = input().strip()
-    posture_threshold = float(posture_threshold) if posture_threshold else "15"
-    
-    return ear_threshold, mar_threshold, posture_threshold
+    return ear_threshold, mar_threshold
 
 def run_command(command):
     """Chạy lệnh"""
@@ -71,24 +67,24 @@ def main():
             # Chạy bình thường
             print("\n▶️  Chạy hệ thống...")
             camera_id = get_camera_id()
-            ear_threshold, mar_threshold, posture_threshold = get_thresholds()
-            command = f"python3 main.py --camera {camera_id} --threshold {ear_threshold} --yawn-threshold {mar_threshold} --posture-threshold {posture_threshold}"
+            ear_threshold, mar_threshold = get_thresholds()
+            command = f"python3 main.py --camera {camera_id} --threshold {ear_threshold} --yawn-threshold {mar_threshold}"
             run_command(command)
         
         elif choice == "2":
             # Chạy nền
             print("\n▶️  Chạy hệ thống (nền)...")
             camera_id = get_camera_id()
-            ear_threshold, mar_threshold, posture_threshold = get_thresholds()
-            command = f"python3 main.py --camera {camera_id} --threshold {ear_threshold} --yawn-threshold {mar_threshold} --posture-threshold {posture_threshold} --no-display"
+            ear_threshold, mar_threshold = get_thresholds()
+            command = f"python3 main.py --camera {camera_id} --threshold {ear_threshold} --yawn-threshold {mar_threshold} --no-display"
             run_command(command)
         
         elif choice == "3":
             # Chạy và lưu video
             print("\n▶️  Chạy hệ thống (lưu video)...")
             camera_id = get_camera_id()
-            ear_threshold, mar_threshold, posture_threshold = get_thresholds()
-            command = f"python3 main.py --camera {camera_id} --threshold {ear_threshold} --yawn-threshold {mar_threshold} --posture-threshold {posture_threshold} --save-video"
+            ear_threshold, mar_threshold = get_thresholds()
+            command = f"python3 main.py --camera {camera_id} --threshold {ear_threshold} --yawn-threshold {mar_threshold} --save-video"
             run_command(command)
         
         elif choice == "4":
@@ -118,7 +114,7 @@ def main():
             print("\n📖 Xem tài liệu...")
             print("\n  📚 Tài liệu chính: README.md")
             print("  🏗️  Kiến trúc: ARCHITECTURE.md")
-            print("  🎯 Ngáp & Tư thế: YAWN_POSTURE_GUIDE.md")
+            print("  🎯 Yawn Detection: YAWN_POSTURE_GUIDE.md")
             print("  ⚡ Bắt đầu nhanh: QUICK_SUMMARY.md")
         
         elif choice == "9":
