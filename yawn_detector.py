@@ -53,17 +53,17 @@ class YawnDetector:
         
         return mar
     
-    def detect_yawn(self, landmarks, mar_threshold=0.5):
+    def detect_yawn(self, landmarks, mar_threshold=0.65):
         """
-        Phát hiện ngáp dựa trên Mouth Aspect Ratio
+        Phat hien ngap dua tren Mouth Aspect Ratio
         
         Args:
-            landmarks: Mảng 68x2 chứa tọa độ điểm mốc khuôn mặt
-            mar_threshold: Ngưỡng MAR để xác định ngáp
+            landmarks: Mang 68x2 chua toa do diem moc khuon mat
+            mar_threshold: Nguong MAR de xac dinh ngap (mac dinh: 0.65 - neu thap hon se phat hien nhieu am san)
             
         Returns:
-            dict: Thông tin phát hiện gồm:
-                - 'is_yawning': bool (có phát hiện ngáp hay không)
+            dict: Thong tin phat hien gom:
+                - 'is_yawning': bool (co phat hien ngap hay khong)
                 - 'mar': float (Mouth Aspect Ratio)
         """
         result = {

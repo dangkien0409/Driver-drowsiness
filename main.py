@@ -136,12 +136,13 @@ class DrowsinessDetectionSystem:
         # Vẽ kết quả
         frame_with_results = self.eye_detector.draw_results(frame, detection_result)
         
-        # Vẽ ngáp
+        # Vẽ ngáp (chỉ khi đã xác nhận qua consecutive frames)
+        confirmed_yawn = self.yawn_frame_count >= config.YAWN_CONSEC_FRAMES
         if detection_result.get('landmarks') is not None:
             frame_with_results = self.yawn_detector.draw_mouth(
                 frame_with_results, 
                 detection_result['landmarks'], 
-                yawn_result['is_yawning']
+                confirmed_yawn
             )
         
         # Add status info
