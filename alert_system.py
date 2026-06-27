@@ -3,6 +3,12 @@ import os
 import time
 from datetime import datetime
 import logging
+from importlib import import_module
+
+try:
+    GPIO = import_module("Jetson.GPIO")
+except Exception:
+    GPIO = None
 
 class AlertSystem:
     """
@@ -19,9 +25,14 @@ class AlertSystem:
         self.config = config
         self.last_alert_time = 0
         self.alert_cooldown = 2  # Khoảng thời gian giữa các cảnh báo (giây)
+        self.gpio_ready = False
+        self.buzzer_pin = None
+        self.buzzer_active_state = None
+        self.buzzer_idle_state = None
         
         # Khởi tạo logging
         self.setup_logger()
+        self.setup_buzzer()
     
     def setup_logger(self):
         """Khởi tạo logger cho hệ thống"""
@@ -51,6 +62,45 @@ class AlertSystem:
             self.last_alert_time = current_time
             return True
         return False
+
+    def setup_buzzer(self):
+        """Khởi tạo GPIO cho còi 3 chân nếu được cấu hình."""
+        if not self.config:
+            return
+
+        if not getattr(self.config, "BUZZER_ENABLED", False):
+            return
+
+        self.buzzer_pin = getattr(self.config, "BUZZER_PIN", None)
+        if self.buzzer_pin is None or GPIO is None:
+            return
+
+        try:
+            GPIO.setwarnings(False)
+            GPIO.setmode(GPIO.BOARD)
+            GPIO.setup(self.buzzer_pin, GPIO.OUT)
+
+            active_low = bool(getattr(self.config, "BUZZER_ACTIVE_LOW", False))
+            self.buzzer_active_state = GPIO.LOW if active_low else GPIO.HIGH
+            self.buzzer_idle_state = GPIO.HIGH if active_low else GPIO.LOW
+
+            GPIO.output(self.buzzer_pin, self.buzzer_idle_state)
+            self.gpio_ready = True
+            self.logger.info(f"Đã khởi tạo còi GPIO tại BOARD pin {self.buzzer_pin}")
+        except Exception as e:
+            self.gpio_ready = False
+            self.logger.warning(f"Không thể khởi tạo còi GPIO: {e}")
+
+    def cleanup(self):
+        """Giải phóng tài nguyên GPIO nếu có."""
+        if self.gpio_ready and GPIO is not None and self.buzzer_pin is not None:
+            try:
+                GPIO.output(self.buzzer_pin, self.buzzer_idle_state)
+                GPIO.cleanup(self.buzzer_pin)
+            except Exception:
+                pass
+            finally:
+                self.gpio_ready = False
     
     def sound_alert(self):
         """
@@ -61,6 +111,16 @@ class AlertSystem:
         - Phát tệp audio
         - I2C speaker module
         """
+        if self.gpio_ready and self.buzzer_pin is not None:
+            duration = getattr(self.config, "BUZZER_BEEP_DURATION", 0.2) if self.config else 0.2
+            try:
+                GPIO.output(self.buzzer_pin, self.buzzer_active_state)
+                time.sleep(duration)
+                GPIO.output(self.buzzer_pin, self.buzzer_idle_state)
+                return
+            except Exception as e:
+                self.logger.warning(f"Lỗi khi kích hoạt còi GPIO: {e}")
+
         try:
             # Cách 1: Sử dụng beep nội trang (nếu có)
             os.system('beep')
@@ -153,6 +213,12 @@ class AlertSystem:
             self.send_email_alert(
                 body=f"Left EAR: {detection_info.get('left_ear', 0):.3f}, Right EAR: {detection_info.get('right_ear', 0):.3f}"
             )
+
+    def __del__(self):
+        try:
+            self.cleanup()
+        except Exception:
+            pass
     
     def save_drowsy_frame(self, frame, detection_info=None):
         """

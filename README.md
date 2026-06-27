@@ -136,6 +136,13 @@ YAWN_CONSEC_FRAMES = 10          # Khung liên tiếp để xác nhận ngáp
 
 # ===== CẢNH BÁO =====
 ALERT_TYPE = "sound"             # "sound", "email", "sms", "all"
+
+# ===== CÒI 3 CHÂN =====
+# Đặt BUZZER_PIN theo BOARD pin numbering
+BUZZER_ENABLED = True
+BUZZER_PIN = 11                
+BUZZER_ACTIVE_LOW = False        # Đổi True nếu module kích mức thấp
+BUZZER_BEEP_DURATION = 0.2
 ```
 
 ## 🎯 Chi tiết thuật toán
@@ -238,8 +245,6 @@ file -i posture_detector.py
 iconv -f ISO-8859-1 -t UTF-8 posture_detector.py -o posture_detector_fixed.py
 mv posture_detector_fixed.py posture_detector.py
 ```
-
-**Lưu ý Windows**: Mở VS Code, bấm Ctrl+Shift+P, gõ "Reopen with Encoding", chọn UTF-8
 
 ## 📝 Log và Dữ liệu
 
