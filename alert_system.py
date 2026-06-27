@@ -120,13 +120,39 @@ class AlertSystem:
                 return
             except Exception as e:
                 self.logger.warning(f"Lỗi khi kích hoạt còi GPIO: {e}")
+        # Nếu GPIO không có hoặc failed, thử phát file âm thanh nếu có
+        sound_path = getattr(self.config, "ALARM_SOUND_PATH", None) if self.config else None
+        if sound_path and os.path.exists(sound_path):
+            # ưu tiên aplay (ALSA) hoặc paplay
+            players = ["aplay", "paplay", "ffplay -nodisp -autoexit", "play"]
+            played = False
+            for p in players:
+                cmd = f"{p} {sound_path} >/dev/null 2>&1"
+                try:
+                    ret = os.system(cmd)
+                    if ret == 0:
+                        played = True
+                        self.logger.info(f"Đã phát âm thanh cảnh báo bằng {p}")
+                        break
+                except Exception:
+                    continue
+            if played:
+                return
 
+        # Thử lệnh beep (nếu cài)
         try:
-            # Cách 1: Sử dụng beep nội trang (nếu có)
-            os.system('beep')
-        except:
-            # Cách 2: In thông báo (fallback)
+            ret = os.system('beep')
+            if ret == 0:
+                return
+        except Exception:
+            pass
+
+        # Cuối cùng dùng terminal bell làm fallback
+        try:
             print("\a\a\a")  # Terminal bell
+            self.logger.info("Đã dùng terminal bell làm fallback cho cảnh báo")
+        except Exception:
+            self.logger.warning("Không thể phát bất kỳ cảnh báo âm thanh nào")
     
     def log_alert(self, detection_info=None):
         """
