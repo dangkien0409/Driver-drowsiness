@@ -42,15 +42,15 @@ Driver-drowsiness/
 │   │   └── shape_predictor_68_face_landmarks.dat
 │   ├── logs/                         # File log hệ thống
 │   │   └── drowsiness_detection.log
-│   ├── captured_frames/              # Khung hình khi ngủ
-│   │   ├── Ngap/                     # Sự kiện ngáp/buồn ngủ
-│   │   │   └── 20240101_120000/
-│   │   │       ├── frame_0001_20240101_120000_000001.jpg
-│   │   │       └── session_info.txt
-│   │   └── Ngu Gat/                  # Sự kiện ngủ gật
-│   │       └── 20240101_120500/
-│   │           ├── frame_0001_20240101_120500_000001.jpg
-│   │           └── session_info.txt
+│   ├── captured_frames/              # Khung hình theo từng session
+│   │   └── session_20240101_120000/
+│   │       ├── Ngu Gat/              # Sự kiện ngủ gật
+│   │       │   ├── frame_0001_20240101_120500_000001.jpg
+│   │       │   └── ...
+│   │       ├── Buon Ngu/             # Sự kiện buồn ngủ / ngáp kéo dài
+│   │       │   ├── frame_0001_20240101_120700_000001.jpg
+│   │       │   └── ...
+│   │       └── session_info.txt      # Tóm tắt phiên ghi ảnh
 │   └── sounds/                       # Âm thanh cảnh báo
 │       └── alarm.wav
 │
@@ -70,7 +70,7 @@ Driver-drowsiness/
 - **eye_detector.py**: Phát hiện mắt dùng dlib, tính toán EAR
 - **yawn_detector.py**: Phát hiện ngáp dùng MAR (Mouth Aspect Ratio)
 - **posture_detector.py**: Phát hiện tư thế đầu (lech, cúi, tư thế cúi)
-- **alert_system.py**: Cảnh báo, logging, lưu ảnh
+- **alert_system.py**: Cảnh báo, logging, lưu ảnh theo session
 - **config.py**: Các hằng số cấu hình toàn bộ hệ thống
 
 ### Utilities

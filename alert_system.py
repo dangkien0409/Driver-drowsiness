@@ -30,6 +30,10 @@ class AlertSystem:
         self.buzzer_active_state = None
         self.buzzer_idle_state = None
         self.capture_root_dir = getattr(self.config, "CAPTURED_FRAMES_DIR", "captured_frames") if self.config else "captured_frames"
+        self.session_dir_prefix = getattr(self.config, "SESSION_DIR_PREFIX", "session") if self.config else "session"
+        self.session_root_dir = None
+        self.session_started_at = None
+        self.session_ended_at = None
         self.active_capture_type = None
         self.active_capture_dir = None
         self.active_capture_frame_count = 0
@@ -39,6 +43,7 @@ class AlertSystem:
         # Khởi tạo logging
         self.setup_logger()
         self.setup_buzzer()
+        self._ensure_session_root()
     
     def setup_logger(self):
         """Khởi tạo logger cho hệ thống"""
@@ -168,16 +173,31 @@ class AlertSystem:
         if normalized in ["ngu gat", "drowsy", "sleep", "sleepy", "sleeping"]:
             return "Ngu Gat"
         if normalized in ["ngap", "buon ngu", "yawn"]:
-            return "Ngap"
+            return "Buon Ngu"
         return None
+
+    def _ensure_session_root(self):
+        if self.session_root_dir is not None:
+            return self.session_root_dir
+
+        self.session_started_at = datetime.now()
+        timestamp = self.session_started_at.strftime("%Y%m%d_%H%M%S")
+        self.session_root_dir = os.path.join(
+            self.capture_root_dir,
+            f"{self.session_dir_prefix}_{timestamp}"
+        )
+        os.makedirs(os.path.join(self.session_root_dir, "Ngu Gat"), exist_ok=True)
+        os.makedirs(os.path.join(self.session_root_dir, "Buon Ngu"), exist_ok=True)
+        self.logger.info(f"Tao thu muc phien ghi anh: {self.session_root_dir}")
+        return self.session_root_dir
 
     def _start_capture_session(self, event_type):
         normalized_type = self._normalize_event_type(event_type)
         if normalized_type is None:
             return None
 
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        session_dir = os.path.join(self.capture_root_dir, normalized_type, timestamp)
+        session_root = self._ensure_session_root()
+        session_dir = os.path.join(session_root, normalized_type)
         os.makedirs(session_dir, exist_ok=True)
 
         self.active_capture_type = normalized_type
@@ -190,27 +210,22 @@ class AlertSystem:
         return session_dir
 
     def _write_capture_summary(self):
-        if not self.active_capture_dir:
+        if not self.session_root_dir:
             return
 
-        summary_path = os.path.join(self.active_capture_dir, "session_info.txt")
+        summary_path = os.path.join(self.session_root_dir, "session_info.txt")
         try:
             with open(summary_path, "w", encoding="utf-8") as summary_file:
-                summary_file.write(f"Event type: {self.active_capture_type}\n")
-                summary_file.write(f"Started at: {self.active_capture_started_at}\n")
-                summary_file.write(f"Ended at: {datetime.now()}\n")
-                summary_file.write(f"Frame count: {self.active_capture_frame_count}\n")
+                summary_file.write(f"Session root: {self.session_root_dir}\n")
+                summary_file.write(f"Started at: {self.session_started_at}\n")
+                summary_file.write(f"Ended at: {self.session_ended_at or datetime.now()}\n")
+                summary_file.write(f"Latest event type: {self.active_capture_type or 'None'}\n")
+                summary_file.write(f"Latest event frame count: {self.active_capture_frame_count}\n")
                 if self.active_capture_last_info:
                     summary_file.write("Last detection info:\n")
-                    summary_file.write(
-                        f"  Left EAR: {self.active_capture_last_info.get('left_ear', 0):.3f}\n"
-                    )
-                    summary_file.write(
-                        f"  Right EAR: {self.active_capture_last_info.get('right_ear', 0):.3f}\n"
-                    )
-                    summary_file.write(
-                        f"  MAR: {self.active_capture_last_info.get('yawn_result', {}).get('mar', 0):.3f}\n"
-                    )
+                    summary_file.write(f"  Left EAR: {self.active_capture_last_info.get('left_ear', 0):.3f}\n")
+                    summary_file.write(f"  Right EAR: {self.active_capture_last_info.get('right_ear', 0):.3f}\n")
+                    summary_file.write(f"  MAR: {self.active_capture_last_info.get('yawn_result', {}).get('mar', 0):.3f}\n")
         except Exception as e:
             self.logger.warning(f"Không thể ghi file tóm tắt sự kiện: {e}")
 
@@ -220,13 +235,20 @@ class AlertSystem:
 
         self._write_capture_summary()
         self.logger.info(
-            f"Kết thúc lưu frame cho sự kiện {self.active_capture_type}: {self.active_capture_dir}"
+            f"Ket thuc luu frame cho su kien {self.active_capture_type}: {self.active_capture_dir}"
         )
         self.active_capture_type = None
         self.active_capture_dir = None
         self.active_capture_frame_count = 0
         self.active_capture_started_at = None
         self.active_capture_last_info = None
+
+    def finalize_run_session(self):
+        if not self.session_root_dir:
+            return
+
+        self.session_ended_at = datetime.now()
+        self._write_capture_summary()
 
     def record_event_frame(self, frame, event_type=None, detection_info=None):
         normalized_type = self._normalize_event_type(event_type)

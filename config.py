@@ -34,6 +34,7 @@ BUZZER_BEEP_DURATION = 0.2
 # Logging
 LOG_DIR = "logs"
 CAPTURED_FRAMES_DIR = "captured_frames"
+SESSION_DIR_PREFIX = "session"
 SAVE_VIDEO = False
 VIDEO_OUTPUT_PATH = "output_video.avi"
 

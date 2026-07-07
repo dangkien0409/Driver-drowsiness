@@ -112,7 +112,7 @@ Driver-drowsiness/
 ├── install_dlib_model.py        # Script tải mô hình
 ├── models/                      # Thư mục lưu mô hình
 ├── logs/                        # Lưu trữ log
-├── captured_frames/             # Lưu trữ ảnh sự kiện
+├── captured_frames/             # Lưu trữ ảnh theo từng session
 └── sounds/                      # Âm thanh cảnh báo
 ```
 
@@ -254,9 +254,9 @@ mv posture_detector_fixed.py posture_detector.py
 - Chứa: Thời gian, mức độ, thông báo lỗi
 
 ### Khung hình sự kiện
-- Vị trí ngáp/buồn ngủ: `captured_frames/Ngap/<timestamp>/`
-- Vị trí ngủ gật: `captured_frames/Ngu Gat/<timestamp>/`
-- Mỗi lần sự kiện sẽ có nhiều frame và file `session_info.txt`
+- Mỗi lần mở thiết bị tạo một session riêng: `captured_frames/session_YYYYMMDD_HHMMSS/`
+- Bên trong session có 2 thư mục con: `Ngu Gat/` và `Buon Ngu/`
+- Mỗi session có nhiều frame và file `session_info.txt`
 
 ## 📡 Mở rộng - Tích hợp email/SMS
 

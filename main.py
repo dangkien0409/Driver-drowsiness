@@ -206,7 +206,7 @@ class DrowsinessDetectionSystem:
                 if is_drowsy:
                     event_type = "Ngu Gat"
                 elif detection_info.get('confirmed_yawn'):
-                    event_type = "Ngap"
+                    event_type = "Buon Ngu"
 
                 self.alert_system.record_event_frame(frame, event_type, detection_info)
                 
@@ -234,6 +234,7 @@ class DrowsinessDetectionSystem:
         
         finally:
             # Giải phóng tài nguyên
+            self.alert_system.finalize_run_session()
             self.alert_system.end_capture_session()
             if self.cap:
                 self.cap.release()

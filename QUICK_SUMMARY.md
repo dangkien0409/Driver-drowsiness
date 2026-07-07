@@ -64,7 +64,7 @@ Driver-drowsiness/
 ├── 📚 QUICK_SUMMARY.md        # File này
 ├── 🌳 models/                 # Mô hình phát hiện
 ├── 📋 logs/                   # Log file
-├── 🎥 captured_frames/        # Ảnh khi cảnh báo
+├── 🎥 captured_frames/        # Ảnh theo từng session
 └── 🔊 sounds/                 # Âm thanh cảnh báo
 ```
 
@@ -184,7 +184,8 @@ ALERT_TYPE = "sound"         # Loại cảnh báo
 ## 📊 Kết quả & Log
 
 - **Log**: `logs/drowsiness_detection.log`
-- **Ảnh**: `captured_frames/drowsy_*.jpg`
+- **Ảnh**: `captured_frames/session_YYYYMMDD_HHMMSS/Ngu Gat/` và `captured_frames/session_YYYYMMDD_HHMMSS/Buon Ngu/`
+- **Tóm tắt phiên**: `captured_frames/session_YYYYMMDD_HHMMSS/session_info.txt`
 - **Video**: `output_video.avi` (nếu --save-video)
 
 ---
