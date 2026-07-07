@@ -23,10 +23,11 @@ YAWN_CONSEC_FRAMES = 15  # So khung hinh lien tiep de xac nhan ngap (tang tu 10)
 ALARM_ENABLED = True
 ALARM_SOUND_PATH = "sounds/alarm.wav"
 
-# Còi 3 chân (signal/VCC/GND) - dùng GPIO điều khiển chân signal
-# Đặt theo BOARD pin numbering. Để None nếu chỉ muốn dùng beep fallback.
+# Còi 3 chân: VCC -> 3.3V, GND -> GND, IN/SIG -> chân signal GPIO
+# Đặt theo BOARD pin numbering. BOARD 11 = chân signal điều khiển còi.
+# Nếu module của bạn kích mức thấp, đổi BUZZER_ACTIVE_LOW = True.
 BUZZER_ENABLED = True
-BUZZER_PIN = None
+BUZZER_PIN = 11
 BUZZER_ACTIVE_LOW = False
 BUZZER_BEEP_DURATION = 0.2
 

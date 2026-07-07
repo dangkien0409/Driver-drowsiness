@@ -138,7 +138,8 @@ YAWN_CONSEC_FRAMES = 10          # Khung liên tiếp để xác nhận ngáp
 ALERT_TYPE = "sound"             # "sound", "email", "sms", "all"
 
 # ===== CÒI 3 CHÂN =====
-# Đặt BUZZER_PIN theo BOARD pin numbering
+# VCC -> 3.3V, GND -> GND, IN/SIG -> chân signal GPIO
+# BUZZER_PIN theo BOARD pin numbering (BOARD 11 = signal)
 BUZZER_ENABLED = True
 BUZZER_PIN = 11                
 BUZZER_ACTIVE_LOW = False        # Đổi True nếu module kích mức thấp
