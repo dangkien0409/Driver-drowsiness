@@ -175,7 +175,7 @@ Chỉnh sửa `config.py`:
 CAMERA_WIDTH = 320           # Độ phân giải
 CAMERA_HEIGHT = 240
 EYE_AR_THRESHOLD = 0.2       # Ngưỡng phát hiện
-EYE_AR_CONSEC_FRAMES = 20    # Khung hình liên tiếp
+EYE_AR_CONSEC_FRAMES = 8     # Khung hình liên tiếp
 ALERT_TYPE = "sound"         # Loại cảnh báo
 ```
 

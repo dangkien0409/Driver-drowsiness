@@ -128,7 +128,7 @@ CAMERA_FPS = 20
 
 # ===== PHÁT HIỆN MẮT =====
 EYE_AR_THRESHOLD = 0.2           # Ngưỡng EAR (Eye Aspect Ratio)
-EYE_AR_CONSEC_FRAMES = 20        # Khung liên tiếp để xác nhận ngủ
+EYE_AR_CONSEC_FRAMES = 8         # Khung liên tiếp để xác nhận ngủ
 
 # ===== PHÁT HIỆN NGÁP =====
 MOUTH_AR_THRESHOLD = 0.5         # Ngưỡng MAR (Mouth Aspect Ratio)  

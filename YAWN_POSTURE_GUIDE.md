@@ -112,7 +112,7 @@ python main.py --camera 1
 | Thông số | Ý nghĩa | Mặc định |
 |----------|---------|---------|
 | EYE_AR_THRESHOLD | Ngưỡng EAR để phát hiện mắt đóng | 0.2 |
-| EYE_AR_CONSEC_FRAMES | Khung liên tiếp để xác nhận ngủ | 20 |
+| EYE_AR_CONSEC_FRAMES | Khung liên tiếp để xác nhận ngủ | 8 |
 | MOUTH_AR_THRESHOLD | Ngưỡng MAR để phát hiện ngáp | 0.5 |
 | YAWN_CONSEC_FRAMES | Khung liên tiếp để xác nhận ngáp | 10 |
 | HEAD_ROLL_THRESHOLD | Góc lệch ngang tối đa | 15° |

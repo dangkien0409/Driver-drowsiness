@@ -13,7 +13,7 @@ CAMERA_DEVICE = 0  # /dev/video0
 
 # Thông số phát hiện mở/đóng mắt
 EYE_AR_THRESHOLD = 0.2  # Eye Aspect Ratio ngưỡng
-EYE_AR_CONSEC_FRAMES = 10  # Số khung hình liên tiếp để phát hiện ngủ
+EYE_AR_CONSEC_FRAMES = 8  # Số khung hình liên tiếp để phát hiện ngủ
 
 # Thong so phat hien ngap
 MOUTH_AR_THRESHOLD = 0.65  # Mouth Aspect Ratio nguong (tang tu 0.5 de giam nhiem duong am)
