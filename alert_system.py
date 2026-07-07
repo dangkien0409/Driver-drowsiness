@@ -262,9 +262,9 @@ class AlertSystem:
         Args:
             detection_info: Thông tin chi tiết về sự phát hiện
         """
-        alert_label = "Phat hien tai xe ngu gat"
+        alert_label = "Phat Hien Ngu Gat"
         if detection_info and detection_info.get("confirmed_yawn") and not detection_info.get("confirmed_drowsy"):
-            alert_label = "Phat hien tai xe buon ngu"
+            alert_label = "Phat Hien Buon Ngu"
 
         message = f"[ALERT] {alert_label}"
         if detection_info:

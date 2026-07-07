@@ -155,8 +155,8 @@ class DrowsinessDetectionSystem:
                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 0), 2)
         
         # Add yawn info
-        yawn_status = "BUON NGU" if self.yawn_frame_count >= config.YAWN_CONSEC_FRAMES else ""
-        yawn_text = f"Buon ngu: {yawn_result['mar']:.2f} {yawn_status if yawn_status else ''}"
+        yawn_status = "NGAP" if self.yawn_frame_count >= config.YAWN_CONSEC_FRAMES else ""
+        yawn_text = f"Ngap: {yawn_result['mar']:.2f} {yawn_status if yawn_status else ''}"
         cv2.putText(frame_with_results, yawn_text, (10, 150),
                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 1)
         
