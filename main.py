@@ -164,6 +164,7 @@ class DrowsinessDetectionSystem:
                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (200, 200, 200), 1)
         
         detection_result['confirmed_drowsy'] = confirmed_drowsy
+        detection_result['confirmed_yawn'] = confirmed_yawn
         detection_result['yawn_result'] = yawn_result
         
         return frame_with_results, confirmed_drowsy, detection_result
@@ -201,8 +202,8 @@ class DrowsinessDetectionSystem:
                 # Xử lý khung hình
                 frame_result, is_drowsy, detection_info = self.process_frame(frame)
                 
-                # Kích hoạt cảnh báo nếu phát hiện ngủ gật
-                if is_drowsy:
+                # Kích hoạt cảnh báo nếu phát hiện ngủ gật hoặc ngáp kéo dài
+                if is_drowsy or detection_info.get('confirmed_yawn'):
                     self.alert_system.trigger_alert(detection_info)
                 
                 # Lưu các khung hình khi ngủ gật
