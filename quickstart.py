@@ -88,7 +88,7 @@ def main():
     print("  python3 main.py                           # Chạy bình thường")
     print("  python3 main.py --no-display              # Không hiển thị (nền)")
     print("  python3 main.py --save-video              # Lưu video")
-    print("  python3 main.py --threshold 0.15          # Thay đổi độ nhạy")
+    print("  Chinh config.py de thay doi do nhay")
     print("  python3 sensitivity_test.py                # Kiểm tra độ nhạy")
     
     print("\n📚 Xem thêm:")

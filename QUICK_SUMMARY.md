@@ -107,7 +107,10 @@ python3 sensitivity_test.py
 python3 quickstart.py
 
 # Tùy chỉnh camera
-python3 main.py --camera 1 --threshold 0.15 --frames 25
+python3 main.py --camera 1
+
+# Tùy chỉnh ngưỡng
+# Chỉnh trực tiếp trong config.py
 
 # Lưu video
 python3 main.py --save-video

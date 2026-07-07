@@ -19,7 +19,7 @@ class DrowsinessDetectionSystem:
     Hệ thống phát hiện ngủ gật toàn bộ
     """
     
-    def __init__(self, ear_threshold=0.2, consecutive_frames=20):
+    def __init__(self, ear_threshold=None, consecutive_frames=None):
         """
         Khởi tạo hệ thống
         
@@ -31,8 +31,8 @@ class DrowsinessDetectionSystem:
         self.yawn_detector = YawnDetector()
         self.alert_system = AlertSystem(config)
         
-        self.ear_threshold = ear_threshold
-        self.consecutive_frames = consecutive_frames
+        self.ear_threshold = ear_threshold if ear_threshold is not None else config.EYE_AR_THRESHOLD
+        self.consecutive_frames = consecutive_frames if consecutive_frames is not None else config.EYE_AR_CONSEC_FRAMES
         self.frame_count = 0
         self.drowsy_frame_count = 0
         self.yawn_frame_count = 0
@@ -252,22 +252,6 @@ def main():
         description="He thong phat hien ngu gat tren Jetson Nano"
     )
     parser.add_argument(
-        "--camera", type=int, default=0,
-        help="ID thiết bị camera (mặc định: 0)"
-    )
-    parser.add_argument(
-        "--threshold", type=float, default=0.2,
-        help="Ngưỡng Eye Aspect Ratio (mặc định: 0.2)"
-    )
-    parser.add_argument(
-        "--frames", type=int, default=20,
-        help="Số khung hình liên tiếp để xác định ngủ (mặc định: 20)"
-    )
-    parser.add_argument(
-        "--yawn-threshold", type=float, default=0.5,
-        help="Nguong Mouth Aspect Ratio de phat hien ngap (mac dinh: 0.5)"
-    )
-    parser.add_argument(
         "--save-video", action="store_true",
         help="Lưu video đầu ra"
     )
@@ -275,19 +259,20 @@ def main():
         "--no-display", action="store_true",
         help="Không hiển thị video (chỉ xử lý nền)"
     )
-    
-    args = parser.parse_args()
-    
-    # Tạo và chạy hệ thống
-    system = DrowsinessDetectionSystem(
-        ear_threshold=args.threshold,
-        consecutive_frames=args.frames
+    parser.add_argument(
+        "--camera", type=int, default=config.CAMERA_DEVICE,
+        help="ID thiết bị camera"
     )
-    
+
+    args = parser.parse_args()
+
+    # Tạo và chạy hệ thống chỉ dùng cấu hình từ config.py
+    system = DrowsinessDetectionSystem()
+
     system.run(
         camera_device=args.camera,
         show_video=not args.no_display,
-        save_video=args.save_video
+        save_video=args.save_video or config.SAVE_VIDEO
     )
 
 if __name__ == "__main__":

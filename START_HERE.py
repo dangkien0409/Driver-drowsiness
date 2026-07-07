@@ -101,15 +101,15 @@ def print_detailed_steps():
   $ python3 main.py --save-video
   
   Chế độ 4: Tuỳ chỉnh ngưỡng
-  $ python3 main.py --threshold 0.18 --yawn-threshold 0.45 --posture-threshold 18
+  # Chỉnh trực tiếp trong config.py
   $ python3 main.py --save-video
   
   Chế độ 4: Tuỳ chỉnh ngưỡng
-  $ python3 main.py --threshold 0.18 --yawn-threshold 0.45 --posture-threshold 18
+  # Chỉnh trực tiếp trong config.py
   $ python3 main.py --save-video
   
   Chế độ 4: Tuỳ chỉnh tham số
-  $ python3 main.py --threshold 0.15 --frames 25
+  # Chỉnh trực tiếp trong config.py
   
   Hoặc sử dụng menu tương tác:
   $ python3 run.py
@@ -164,7 +164,7 @@ Chạy hệ thống
   $ python3 main.py --no-display             # Không hiển thị
   $ python3 main.py --save-video             # Lưu video
   $ python3 main.py --camera 1               # Camera khác
-  $ python3 main.py --threshold 0.15         # Độ nhạy khác
+  # Chỉnh trực tiếp trong config.py         # Độ nhạy khác
 
 Kiểm tra & Thiết lập
   $ python3 check_system.py                  # Kiểm tra hệ thống

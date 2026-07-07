@@ -71,15 +71,6 @@ python3 main.py
 # Chỉ định camera
 python3 main.py --camera 0
 
-# Thay đổi ngưỡng phát hiện mắt (EAR, mặc định 0.2)
-python3 main.py --threshold 0.15
-
-# Thay đổi ngưỡng phát hiện ngáp (MAR, mặc định 0.5)
-python3 main.py --yawn-threshold 0.4
-
-# Thay đổi số khung hình để xác định ngủ (mặc định 20)
-python3 main.py --frames 25
-
 # Lưu video đầu ra
 python3 main.py --save-video
 
@@ -87,7 +78,7 @@ python3 main.py --save-video
 python3 main.py --no-display
 
 # Kết hợp nhiều tùy chọn
-python3 main.py --camera 0 --threshold 0.18 --yawn-threshold 0.45 --save-video
+python3 main.py --camera 0 --save-video
 ```
 
 ### Các phím tắt

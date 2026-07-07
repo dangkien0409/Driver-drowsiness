@@ -68,16 +68,16 @@ python main.py
 ### Chạy với tuỳ chỉnh ngưỡng:
 ```bash
 # Tuỳ chỉnh ngưỡng ngáp (MAR)
-python main.py --yawn-threshold 0.4
+# Chỉnh trong config.py: MOUTH_AR_THRESHOLD = 0.4
 
 # Tuỳ chỉnh ngưỡng góc đầu
 python main.py --posture-threshold 20
 
 # Tuỳ chỉnh ngưỡng mắt
-python main.py --threshold 0.25
+# Chỉnh trong config.py: EYE_AR_THRESHOLD = 0.25
 
 # Kết hợp nhiều thông số
-python main.py --threshold 0.25 --yawn-threshold 0.4 --posture-threshold 18 --frames 25
+# Chỉnh trong config.py: EYE_AR_THRESHOLD = 0.25, MOUTH_AR_THRESHOLD = 0.4, EYE_AR_CONSEC_FRAMES = 25
 ```
 
 ### Tùy chọn khác:

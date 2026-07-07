@@ -33,20 +33,6 @@ def get_camera_id():
     camera_id = input().strip()
     return camera_id if camera_id.isdigit() else "0"
 
-def get_thresholds():
-    """Lấy các ngưỡng từ user"""
-    print("\nNguong phat hien (de trong = mac dinh):")
-    
-    print("  Nguong EAR (mat, mac dinh: 0.2): ", end="")
-    ear_threshold = input().strip()
-    ear_threshold = float(ear_threshold) if ear_threshold else "0.2"
-    
-    print("  Nguong MAR (ngap, mac dinh: 0.5): ", end="")
-    mar_threshold = input().strip()
-    mar_threshold = float(mar_threshold) if mar_threshold else "0.5"
-    
-    return ear_threshold, mar_threshold
-
 def run_command(command):
     """Chạy lệnh"""
     try:
@@ -67,24 +53,21 @@ def main():
             # Chạy bình thường
             print("\n▶️  Chay he thong...")
             camera_id = get_camera_id()
-            ear_threshold, mar_threshold = get_thresholds()
-            command = f"python3 main.py --camera {camera_id} --threshold {ear_threshold} --yawn-threshold {mar_threshold}"
+            command = f"python3 main.py --camera {camera_id}"
             run_command(command)
         
         elif choice == "2":
             # Chạy nền
             print("\n▶️  Chay he thong (nen)...")
             camera_id = get_camera_id()
-            ear_threshold, mar_threshold = get_thresholds()
-            command = f"python3 main.py --camera {camera_id} --threshold {ear_threshold} --yawn-threshold {mar_threshold} --no-display"
+            command = f"python3 main.py --camera {camera_id} --no-display"
             run_command(command)
         
         elif choice == "3":
             # Chạy và lưu video
             print("\n▶️  Chay he thong (luu video)...")
             camera_id = get_camera_id()
-            ear_threshold, mar_threshold = get_thresholds()
-            command = f"python3 main.py --camera {camera_id} --threshold {ear_threshold} --yawn-threshold {mar_threshold} --save-video"
+            command = f"python3 main.py --camera {camera_id} --save-video"
             run_command(command)
         
         elif choice == "4":
