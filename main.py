@@ -155,8 +155,8 @@ class DrowsinessDetectionSystem:
                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 0), 2)
         
         # Add yawn info
-        yawn_status = "BUỒN NGỦ" if self.yawn_frame_count >= config.YAWN_CONSEC_FRAMES else ""
-        yawn_text = f"Buồn ngủ: {yawn_result['mar']:.2f} {yawn_status if yawn_status else ''}"
+        yawn_status = "BUON NGU" if self.yawn_frame_count >= config.YAWN_CONSEC_FRAMES else ""
+        yawn_text = f"Buon ngu: {yawn_result['mar']:.2f} {yawn_status if yawn_status else ''}"
         cv2.putText(frame_with_results, yawn_text, (10, 150),
                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 1)
         
@@ -248,7 +248,7 @@ class DrowsinessDetectionSystem:
 def main():
     """Hàm chính"""
     parser = argparse.ArgumentParser(
-        description="Hệ thống phát hiện ngủ gật trên Jetson Nano"
+        description="He thong phat hien ngu gat tren Jetson Nano"
     )
     parser.add_argument(
         "--camera", type=int, default=0,
@@ -264,7 +264,7 @@ def main():
     )
     parser.add_argument(
         "--yawn-threshold", type=float, default=0.5,
-        help="Ngưỡng Mouth Aspect Ratio để phát hiện ngáp (mặc định: 0.5)"
+        help="Nguong Mouth Aspect Ratio de phat hien ngap (mac dinh: 0.5)"
     )
     parser.add_argument(
         "--save-video", action="store_true",

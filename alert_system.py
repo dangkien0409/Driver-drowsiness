@@ -165,9 +165,9 @@ class AlertSystem:
             return None
 
         normalized = str(event_type).strip().lower()
-        if normalized in ["ngu gat", "ngủ gật", "drowsy", "sleep", "sleepy", "sleeping"]:
+        if normalized in ["ngu gat", "drowsy", "sleep", "sleepy", "sleeping"]:
             return "Ngu Gat"
-        if normalized in ["ngap", "ngáp", "buon ngu", "buồn ngủ", "yawn"]:
+        if normalized in ["ngap", "buon ngu", "yawn"]:
             return "Ngap"
         return None
 
@@ -262,9 +262,9 @@ class AlertSystem:
         Args:
             detection_info: Thông tin chi tiết về sự phát hiện
         """
-        alert_label = "Phát hiện tài xế ngủ gật"
+        alert_label = "Phat hien tai xe ngu gat"
         if detection_info and detection_info.get("confirmed_yawn") and not detection_info.get("confirmed_drowsy"):
-            alert_label = "Phát hiện tài xế buồn ngủ"
+            alert_label = "Phat hien tai xe buon ngu"
 
         message = f"[ALERT] {alert_label}"
         if detection_info:
@@ -299,13 +299,13 @@ class AlertSystem:
             # Nội dung
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             email_body = f"""
-            Cảnh báo: Tài xế đang ngủ gật
+            Canh bao: Tai xe dang ngu gat
             
             Thời gian: {timestamp}
             
             {body}
             
-            Hệ thống phát hiện ngủ gật trên Jetson Nano
+            He thong phat hien ngu gat tren Jetson Nano
             """
             
             message.attach(MIMEText(email_body, "plain"))
@@ -352,5 +352,5 @@ class AlertSystem:
             pass
     
     def save_drowsy_frame(self, frame, detection_info=None):
-        """Giữ tương thích ngược: lưu vào phiên sự kiện Ngủ Gật."""
+        """Keep backward compatibility: save into the Ngu Gat session."""
         self.record_event_frame(frame, "Ngu Gat", detection_info)
