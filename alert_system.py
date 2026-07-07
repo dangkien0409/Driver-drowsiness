@@ -29,6 +29,12 @@ class AlertSystem:
         self.buzzer_pin = None
         self.buzzer_active_state = None
         self.buzzer_idle_state = None
+        self.capture_root_dir = getattr(self.config, "CAPTURED_FRAMES_DIR", "captured_frames") if self.config else "captured_frames"
+        self.active_capture_type = None
+        self.active_capture_dir = None
+        self.active_capture_frame_count = 0
+        self.active_capture_started_at = None
+        self.active_capture_last_info = None
         
         # Khởi tạo logging
         self.setup_logger()
@@ -153,6 +159,101 @@ class AlertSystem:
             self.logger.info("Đã dùng terminal bell làm fallback cho cảnh báo")
         except Exception:
             self.logger.warning("Không thể phát bất kỳ cảnh báo âm thanh nào")
+
+    def _normalize_event_type(self, event_type):
+        if not event_type:
+            return None
+
+        normalized = str(event_type).strip().lower()
+        if normalized in ["ngu gat", "ngủ gật", "drowsy", "sleep", "sleepy", "sleeping"]:
+            return "Ngu Gat"
+        if normalized in ["ngap", "ngáp", "buon ngu", "buồn ngủ", "yawn"]:
+            return "Ngap"
+        return None
+
+    def _start_capture_session(self, event_type):
+        normalized_type = self._normalize_event_type(event_type)
+        if normalized_type is None:
+            return None
+
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        session_dir = os.path.join(self.capture_root_dir, normalized_type, timestamp)
+        os.makedirs(session_dir, exist_ok=True)
+
+        self.active_capture_type = normalized_type
+        self.active_capture_dir = session_dir
+        self.active_capture_frame_count = 0
+        self.active_capture_started_at = datetime.now()
+        self.active_capture_last_info = None
+
+        self.logger.info(f"Bắt đầu lưu frame cho sự kiện {normalized_type}: {session_dir}")
+        return session_dir
+
+    def _write_capture_summary(self):
+        if not self.active_capture_dir:
+            return
+
+        summary_path = os.path.join(self.active_capture_dir, "session_info.txt")
+        try:
+            with open(summary_path, "w", encoding="utf-8") as summary_file:
+                summary_file.write(f"Event type: {self.active_capture_type}\n")
+                summary_file.write(f"Started at: {self.active_capture_started_at}\n")
+                summary_file.write(f"Ended at: {datetime.now()}\n")
+                summary_file.write(f"Frame count: {self.active_capture_frame_count}\n")
+                if self.active_capture_last_info:
+                    summary_file.write("Last detection info:\n")
+                    summary_file.write(
+                        f"  Left EAR: {self.active_capture_last_info.get('left_ear', 0):.3f}\n"
+                    )
+                    summary_file.write(
+                        f"  Right EAR: {self.active_capture_last_info.get('right_ear', 0):.3f}\n"
+                    )
+                    summary_file.write(
+                        f"  MAR: {self.active_capture_last_info.get('yawn_result', {}).get('mar', 0):.3f}\n"
+                    )
+        except Exception as e:
+            self.logger.warning(f"Không thể ghi file tóm tắt sự kiện: {e}")
+
+    def end_capture_session(self):
+        if self.active_capture_type is None:
+            return
+
+        self._write_capture_summary()
+        self.logger.info(
+            f"Kết thúc lưu frame cho sự kiện {self.active_capture_type}: {self.active_capture_dir}"
+        )
+        self.active_capture_type = None
+        self.active_capture_dir = None
+        self.active_capture_frame_count = 0
+        self.active_capture_started_at = None
+        self.active_capture_last_info = None
+
+    def record_event_frame(self, frame, event_type=None, detection_info=None):
+        normalized_type = self._normalize_event_type(event_type)
+
+        if normalized_type is None:
+            self.end_capture_session()
+            return
+
+        if self.active_capture_type != normalized_type or self.active_capture_dir is None:
+            self.end_capture_session()
+            self._start_capture_session(normalized_type)
+
+        if self.active_capture_dir is None:
+            return
+
+        self.active_capture_frame_count += 1
+        self.active_capture_last_info = detection_info
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+        filename = os.path.join(
+            self.active_capture_dir,
+            f"frame_{self.active_capture_frame_count:04d}_{timestamp}.jpg"
+        )
+
+        try:
+            cv2.imwrite(filename, frame)
+        except Exception as e:
+            self.logger.warning(f"Không thể lưu frame sự kiện: {e}")
     
     def log_alert(self, detection_info=None):
         """
@@ -161,7 +262,11 @@ class AlertSystem:
         Args:
             detection_info: Thông tin chi tiết về sự phát hiện
         """
-        message = f"[ALERT] Phát hiện tài xế ngủ gật"
+        alert_label = "Phát hiện tài xế ngủ gật"
+        if detection_info and detection_info.get("confirmed_yawn") and not detection_info.get("confirmed_drowsy"):
+            alert_label = "Phát hiện tài xế buồn ngủ"
+
+        message = f"[ALERT] {alert_label}"
         if detection_info:
             message += f" - Left EAR: {detection_info.get('left_ear', 0):.3f}, Right EAR: {detection_info.get('right_ear', 0):.3f}"
         
@@ -247,23 +352,5 @@ class AlertSystem:
             pass
     
     def save_drowsy_frame(self, frame, detection_info=None):
-        """
-        Lưu khung hình khi phát hiện ngủ gật để phân tích sau
-        
-        Args:
-            frame: Khung hình
-            detection_info: Thông tin phát hiện
-        """
-        if not os.path.exists('captured_frames'):
-            os.makedirs('captured_frames')
-        
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"captured_frames/drowsy_{timestamp}.jpg"
-        cv2.imwrite(filename, frame)
-        
-        # Ghi metadata
-        with open(filename.replace('.jpg', '.txt'), 'w') as f:
-            if detection_info:
-                f.write(f"Left EAR: {detection_info.get('left_ear', 0):.3f}\n")
-                f.write(f"Right EAR: {detection_info.get('right_ear', 0):.3f}\n")
-            f.write(f"Timestamp: {datetime.now()}\n")
+        """Giữ tương thích ngược: lưu vào phiên sự kiện Ngủ Gật."""
+        self.record_event_frame(frame, "Ngu Gat", detection_info)

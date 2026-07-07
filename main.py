@@ -155,8 +155,8 @@ class DrowsinessDetectionSystem:
                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 0), 2)
         
         # Add yawn info
-        yawn_status = "YAWN" if self.yawn_frame_count >= config.YAWN_CONSEC_FRAMES else ""
-        yawn_text = f"Yawn: {yawn_result['mar']:.2f} {yawn_status if yawn_status else ''}"
+        yawn_status = "BUỒN NGỦ" if self.yawn_frame_count >= config.YAWN_CONSEC_FRAMES else ""
+        yawn_text = f"Buồn ngủ: {yawn_result['mar']:.2f} {yawn_status if yawn_status else ''}"
         cv2.putText(frame_with_results, yawn_text, (10, 150),
                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 1)
         
@@ -201,14 +201,18 @@ class DrowsinessDetectionSystem:
                 
                 # Xử lý khung hình
                 frame_result, is_drowsy, detection_info = self.process_frame(frame)
+
+                event_type = None
+                if is_drowsy:
+                    event_type = "Ngu Gat"
+                elif detection_info.get('confirmed_yawn'):
+                    event_type = "Ngap"
+
+                self.alert_system.record_event_frame(frame, event_type, detection_info)
                 
                 # Kích hoạt cảnh báo nếu phát hiện ngủ gật hoặc ngáp kéo dài
-                if is_drowsy or detection_info.get('confirmed_yawn'):
+                if event_type is not None:
                     self.alert_system.trigger_alert(detection_info)
-                
-                # Lưu các khung hình khi ngủ gật
-                if is_drowsy and detection_info.get('faces'):
-                    self.alert_system.save_drowsy_frame(frame, detection_info)
                 
                 # Hiển thị video
                 if show_video:
@@ -230,6 +234,7 @@ class DrowsinessDetectionSystem:
         
         finally:
             # Giải phóng tài nguyên
+            self.alert_system.end_capture_session()
             if self.cap:
                 self.cap.release()
             if out:

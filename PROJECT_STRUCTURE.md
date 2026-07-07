@@ -43,8 +43,14 @@ Driver-drowsiness/
 │   ├── logs/                         # File log hệ thống
 │   │   └── drowsiness_detection.log
 │   ├── captured_frames/              # Khung hình khi ngủ
-│   │   ├── drowsy_20240101_120000.jpg
-│   │   └── drowsy_20240101_120000.txt
+│   │   ├── Ngap/                     # Sự kiện ngáp/buồn ngủ
+│   │   │   └── 20240101_120000/
+│   │   │       ├── frame_0001_20240101_120000_000001.jpg
+│   │   │       └── session_info.txt
+│   │   └── Ngu Gat/                  # Sự kiện ngủ gật
+│   │       └── 20240101_120500/
+│   │           ├── frame_0001_20240101_120500_000001.jpg
+│   │           └── session_info.txt
 │   └── sounds/                       # Âm thanh cảnh báo
 │       └── alarm.wav
 │

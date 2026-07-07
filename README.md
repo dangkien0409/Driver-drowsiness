@@ -253,9 +253,10 @@ mv posture_detector_fixed.py posture_detector.py
 - Vị trí: `logs/drowsiness_detection.log`
 - Chứa: Thời gian, mức độ, thông báo lỗi
 
-### Khung hình ngủ
-- Vị trí: `captured_frames/drowsy_YYYYMMDD_HHMMSS.jpg`
-- Kèm theo: File metadata `.txt`
+### Khung hình sự kiện
+- Vị trí ngáp/buồn ngủ: `captured_frames/Ngap/<timestamp>/`
+- Vị trí ngủ gật: `captured_frames/Ngu Gat/<timestamp>/`
+- Mỗi lần sự kiện sẽ có nhiều frame và file `session_info.txt`
 
 ## 📡 Mở rộng - Tích hợp email/SMS
 

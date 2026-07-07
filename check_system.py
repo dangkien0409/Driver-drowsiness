@@ -74,7 +74,14 @@ def check_directories():
     print("\n📁 Kiểm tra Thư mục:")
     print("-" * 50)
     
-    directories = ['models', 'logs', 'captured_frames', 'sounds']
+    directories = [
+        'models',
+        'logs',
+        'captured_frames',
+        os.path.join('captured_frames', 'Ngap'),
+        os.path.join('captured_frames', 'Ngu Gat'),
+        'sounds'
+    ]
     
     for dir_name in directories:
         if os.path.exists(dir_name):
