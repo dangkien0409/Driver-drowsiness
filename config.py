@@ -28,7 +28,6 @@ ALARM_SOUND_PATH = "sounds/alarm.wav"
 # Nếu module của bạn kích mức thấp, đổi BUZZER_ACTIVE_LOW = True.
 BUZZER_ENABLED = True
 BUZZER_PIN = 11
-BUZZER_ACTIVE_LOW = False
 BUZZER_BEEP_DURATION = 0.2
 
 # Logging
